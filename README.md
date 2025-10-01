@@ -1,7 +1,7 @@
 # nvim-config
 My neovim config :D
 
-
+https://github.com/XCroatoanX/nvim-config/blob/master/nvim-screenshot.png?raw=true
 
 ## Prerequisites
 For this config to work, you need to have `npm`, `neovim`, `git` preinstalled
