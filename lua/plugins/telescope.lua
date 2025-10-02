@@ -5,7 +5,8 @@ return {
       "nvim-lua/plenary.nvim",
       "sharkdp/fd",
       "BurntSushi/ripgrep",
-       "nvim-telescope/telescope-fzy-native.nvim",
+      "nvim-telescope/telescope-fzy-native.nvim",
+      "tsakirist/telescope-lazy.nvim"
     },
     config = function()
       local telescope = require("telescope")
