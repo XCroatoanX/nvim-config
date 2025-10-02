@@ -31,5 +31,18 @@ vim.keymap.set("v", "<C-_>", function()
   require("Comment.api").toggle.linewise(vim.fn.visualmode())
 end, { noremap = true, silent = true })
 
+-- gutter LSP icons
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN]  = "",
+      [vim.diagnostic.severity.HINT]  = "",
+      [vim.diagnostic.severity.INFO]  = "",
+    },
+  },
+})
+
+
 -- Load all plugins from plugins directory
 require("lazy").setup("plugins")
