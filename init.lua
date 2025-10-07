@@ -51,7 +51,6 @@ vim.diagnostic.config({
   },
 })
 
-
 -- Load all plugins from plugins directory
 require("lazy").setup("plugins")
 

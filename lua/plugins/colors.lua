@@ -26,5 +26,8 @@ return {
     opts = {
       style = "dark", -- "dark" or "light"
     },
+    config = function()
+      vim.cmd("colorscheme vscode") -- <-- apply after plugin loads
+    end,
   },
 }
