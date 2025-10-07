@@ -5,7 +5,8 @@ return {
     config = function()
       require('lualine').setup({
         options = {
-          theme = 'gruvbox_dark',
+          -- available: vscode, gruvbox
+          theme = 'vscode',
         },
       })
     end,
@@ -28,5 +29,16 @@ return {
       show_warnings = false,
       highlights = { defaults = { bold = true }, },
     }
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+  },
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
 }

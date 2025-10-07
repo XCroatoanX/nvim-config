@@ -31,6 +31,14 @@ vim.keymap.set("v", "<C-_>", function()
   require("Comment.api").toggle.linewise(vim.fn.visualmode())
 end, { noremap = true, silent = true })
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "*.tf", "*.tfvars", "*.tfstate" },
+  callback = function()
+    vim.bo.filetype = "terraform"
+  end,
+})
+
+
 -- gutter LSP icons
 vim.diagnostic.config({
   signs = {
@@ -46,3 +54,5 @@ vim.diagnostic.config({
 
 -- Load all plugins from plugins directory
 require("lazy").setup("plugins")
+
+vim.cmd([[autocmd VimEnter * Neotree]])
