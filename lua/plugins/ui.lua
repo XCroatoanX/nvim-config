@@ -1,21 +1,6 @@
 -- Plugin specification
 return {
   {
-    'nvim-lualine/lualine.nvim',
-    config = function()
-      require('lualine').setup({
-        options = {
-          -- available: vscode, gruvbox
-          theme = 'vscode',
-        },
-      })
-    end,
-  },
-  {
-    "karb94/neoscroll.nvim",
-    opts = {},
-  },
-  {
     'mawkler/modicator.nvim',
     dependencies = 'mawkler/onedark.nvim', -- Add your colorscheme plugin here
     init = function()
@@ -40,5 +25,13 @@ return {
   {
     "HiPhish/rainbow-delimiters.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
+  },
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    preview = {
+      icon_provider = "devicons",
+    },
+    dependencies = { "saghen/blink.cmp" },
   },
 }

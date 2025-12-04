@@ -6,16 +6,21 @@ return {
     config = true,
   },
 
-  -- lspkind for pictograms in completions
-  {
-    "onsails/lspkind-nvim",
-    lazy = false,
-  },
-
   -- Commenting plugin
   {
     'numToStr/Comment.nvim',
     opts = {},
+    config = function()
+      require('Comment').setup()
+      -- Normal mode toggle
+      vim.keymap.set('n', '<C-_>', function()
+        require('Comment.api').toggle.linewise.current()
+      end, { noremap = true, silent = true })
+      -- Visual mode toggle
+      vim.keymap.set('v', '<C-_>', function()
+        require('Comment.api').toggle.linewise(vim.fn.visualmode())
+      end, { noremap = true, silent = true })
+    end,
   },
 
   -- todo-comments
@@ -25,11 +30,6 @@ return {
     opts = {},
   },
 
-  -- Git signs
-  {
-    "lewis6991/gitsigns.nvim",
-    opts = {},
-  },
   -- Hide API keys
   {
     "laytan/cloak.nvim",
@@ -51,33 +51,6 @@ return {
             replace = nil,
           },
         },
-      })
-    end,
-  },
-
-  -- Copilot
-  {
-    "zbirenbaum/copilot.lua",
-    dependencies = {
-      "copilotlsp-nvim/copilot-lsp", -- optional: NES functionality
-    },
-    cmd = "Copilot",                 -- lazy-load when :Copilot is used
-    event = "InsertEnter",           -- lazy-load when entering insert mode
-    config = function()
-      require("copilot").setup({
-        suggestion = {
-          auto_trigger = true,
-          keymap = {
-            accept = "<Tab>",
-            accept_word = false,
-            accept_line = false,
-            next = "<C-j>",
-            prev = "<C-k>",
-            dismiss = "<C-]>",
-          },
-        },                               -- enable ghost text
-        panel = { auto_refresh = true }, -- enable the Copilot panel
-        nes = { enabled = false, auto_trigger = true },
       })
     end,
   },

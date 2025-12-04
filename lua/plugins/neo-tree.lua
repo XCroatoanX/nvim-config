@@ -28,6 +28,10 @@ return {
           },
         },
       })
+
+      -- Toggle Neo-tree with Ctrl+E
+      vim.keymap.set('n', '<C-e>', '<cmd>Neotree reveal<CR>',
+        { noremap = true, silent = true, desc = 'Toggle Neo-tree' })
     end,
   },
   {
