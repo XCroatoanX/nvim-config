@@ -1,10 +1,26 @@
 return {
-  "nvim-treesitter/nvim-treesitter",
-  build = ":TSUpdate",
-  lazy = false,
-  config = function()
-    require("nvim-treesitter.configs").setup {
-      highlight = { enable = true, additional_vim_regex_highlighting = false },
-    }
-  end,
+  {
+    'nvim-treesitter/nvim-treesitter',
+    lazy = false,
+    branch = 'main',
+    build = ':TSUpdate'
+  },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+  },
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+  },
 }

@@ -1,3 +1,4 @@
+-- telescope, basically a fuzzy finder
 return {
   {
     "nvim-telescope/telescope.nvim",

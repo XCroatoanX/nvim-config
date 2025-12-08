@@ -1,3 +1,4 @@
+-- still need to configure, need for building and debugging
 return {
   {
     "mfussenegger/nvim-dap",
