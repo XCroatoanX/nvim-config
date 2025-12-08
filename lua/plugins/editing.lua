@@ -54,4 +54,8 @@ return {
       })
     end,
   },
+  -- Auto close and rename html tags
+  {
+  "windwp/nvim-ts-autotag"
+}
 }
