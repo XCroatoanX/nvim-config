@@ -93,4 +93,24 @@ return {
       highlights = { defaults = { bold = true }, },
     }
   },
+  -- Smear Cursor
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {},
+  },
+  -- tiny-glimmer
+  {
+    "rachartier/tiny-glimmer.nvim",
+    event = "VeryLazy",
+    priority = 10, -- Low priority to catch other plugins' keybindings
+    config = function()
+      require("tiny-glimmer").setup()
+    end,
+  },
+  {
+    "petertriho/nvim-scrollbar",
+    config = function()
+      require("scrollbar").setup()
+    end,
+  }
 }
