@@ -68,10 +68,28 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     config = function()
+      local navic_ok, navic = pcall(require, 'nvim-navic')
+
       require('lualine').setup({
         options = {
           -- available: vscode, gruvbox
           theme = 'gruvbox',
+        },
+        sections = {
+          lualine_c = {
+            'filename',
+            {
+              function()
+                if navic_ok and navic.is_available() then
+                  return navic.get_location()
+                end
+                return ''
+              end,
+              cond = function()
+                return navic_ok and navic.is_available()
+              end,
+            },
+          },
         },
       })
     end,
@@ -112,5 +130,18 @@ return {
     config = function()
       require("scrollbar").setup()
     end,
+  },
+  {
+    "SmiteshP/nvim-navic",
+    dependencies = { "neovim/nvim-lspconfig" },
+    config = function()
+      require("nvim-navic").setup({
+        highlight = true,
+        separator = " ",
+        depth_limit = 5,
+        lazy_update_context = true, -- optional
+      })
+    end,
   }
+
 }
