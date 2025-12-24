@@ -4,7 +4,7 @@ My neovim config :D
 ![Neovim Screenshot](https://github.com/XCroatoanX/nvim-config/blob/master/nvim-screenshot.png?raw=true)
 
 ## Prerequisites
-For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-cli` preinstalled
+For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-cli`,`fd`, `ripgrep`, `lazygit` preinstalled
 
 ## How to use
 1. Install neovim latest
@@ -13,17 +13,12 @@ For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-c
 4. open neovim and run `:Lazy sync`
 
 ## Cheatsheet
-### Neotree
-For opening file manager, use `Neotree` or `ctrl + e`
+### nvim-tree
+For opening file manager, use `NvimTreeOpen` or `ctrl + e`
 * To create a file, press `a`
 * To edit a file, press `r`
 * For details, press `i`
 * For opening, press `t`
-
-### Neogit
-For git management: use `Neogit`
-* For commiting, stage file with `s`, then press `c` and after writing a message, use `ctrl + c` two times
-* For pusing, press `shift + p` and use settings you need
 
 ### LSP Install
 * To install a LSP for your language, use `LspInstall` and choose an extension you want.
@@ -33,10 +28,10 @@ To search for a file, use `Telescope find_files` and search for filename or cont
 
 ### AI
 * To ask opencode something, use either `OpencodePrompt` or select text and press `ctrl + a`
-* To accept completion, press `ctrl + l` 
+* To accept completion, press `alt + l` 
 * To dismiss completion, press `ctrl + ]` 
 
 ### DAP
 Documentation will come after implementation
 
-More info will follow 
+More info will follow

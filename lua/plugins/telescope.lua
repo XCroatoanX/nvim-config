@@ -4,10 +4,8 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "sharkdp/fd",
-      "BurntSushi/ripgrep",
       "nvim-telescope/telescope-fzy-native.nvim",
-      "tsakirist/telescope-lazy.nvim"
+      "tsakirist/telescope-lazy.nvim",
     },
     config = function()
       local telescope = require("telescope")
@@ -55,16 +53,14 @@ return {
           buffers = { theme = "dropdown", previewer = false },
         },
         extensions = {
-          fzf = {
-            fuzzy = true,
-            override_generic_sorter = true,
+          fzy_native = {
+            override_generic_sorter = false,
             override_file_sorter = true,
-            case_mode = "smart_case",
           },
         },
       })
 
-      pcall(telescope.load_extension, "fzf")
+      pcall(telescope.load_extension, "fzy_native")
 
       local builtin = require("telescope.builtin")
       local map = vim.keymap.set
