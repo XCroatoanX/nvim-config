@@ -64,6 +64,8 @@ return {
     end,
   },
 
+  -- Show filename + current function
+
   -- Lualine statusline
   {
     'nvim-lualine/lualine.nvim',
@@ -94,6 +96,26 @@ return {
       })
     end,
   },
+
+  {
+    "SmiteshP/nvim-navic",
+    dependencies = { "neovim/nvim-lspconfig" },
+    config = function()
+      local navic = require("nvim-navic")
+
+      navic.setup({
+        highlight = true,
+        separator = " > ",
+        depth_limit = 5,
+        lazy_update_context = true,
+        auto_attach = true, -- automatically attach to LSPs
+      })
+
+      -- Winbar showing filename + current function
+      vim.o.winbar = "%f %{%v:lua.require'nvim-navic'.is_available() and require'nvim-navic'.get_location() or ''%}"
+    end,
+  },
+
 
   -- Modicator: A minimal mode indicator for Neovim
   {
