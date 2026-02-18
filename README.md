@@ -9,7 +9,7 @@ For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-c
 ## How to use
 1. Install neovim latest
 2. Install a nerd font, like Fire Code Nerd
-3. Clone lazy.nvim:
+3. Clone lazy.nvim:<br>
 Linux / Mac = `git clone https://github.com/folke/lazy.nvim ~/.config/nvim/`<br>
 Windows = `git clone https://github.com/folke/lazy.nvim ~/AppData/local/nvim/`
 5. open neovim, everything will install automatically
