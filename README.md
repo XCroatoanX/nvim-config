@@ -4,7 +4,7 @@ My neovim config :D
 ![Neovim Screenshot](https://github.com/XCroatoanX/nvim-config/blob/master/nvim-screenshot.png?raw=true)
 
 ## Prerequisites
-For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-cli` (install with npm),`fd`, `ripgrep`, `lazygit` preinstalled
+For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-cli` (install with npm),`fd`, `ripgrep`, `lazygit`, `make` preinstalled
 
 ## How to use
 1. Install neovim latest
