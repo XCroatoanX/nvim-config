@@ -4,7 +4,11 @@ My neovim config :D
 ![Neovim Screenshot](https://github.com/XCroatoanX/nvim-config/blob/master/nvim-screenshot.png?raw=true)
 
 ## Prerequisites
-For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-cli` (install with npm),`fd`, `ripgrep`, `lazygit`, `make` preinstalled
+For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-cli` (install with npm),`fd`, `ripgrep`, `lazygit`, `cmake` preinstalled
+
+>[!NOTE]<br>
+>For Windows, you also need **Visual Studio Build Tools**<br>
+>For UNIX, you also need **gcc** (or clang) and **make**
 
 ## How to use
 1. Install neovim latest
