@@ -1,186 +1,43 @@
-return {
-  -- Nice nvim UI for messages, cmdline and the popupmenu
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
-    },
-    config = function()
-      -- Setup notify first
-      require("notify").setup({
-        background_colour = "#282828", -- Gruvbox dark background
-      })
-
-      -- Then setup noice
-      require("noice").setup({
-        lsp = {
-          override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
-          },
-        },
-        presets = {
-          bottom_search = true,
-          command_palette = false,
-          long_message_to_split = true,
-          inc_rename = false,
-          lsp_doc_border = false,
-        },
-      })
-    end,
-  },
-
-  -- Gruvbox theme
-  {
-    "ellisonleao/gruvbox.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {
-      contrast = "soft", -- optional
-    }
-  },
-
-  -- JB theme
-  {
-    "nickkadutskyi/jb.nvim",
-    lazy = false,
-    priority = 900,
-    opts = {},
-  },
-
-  -- VSCode theme
-  {
-    "Mofiqul/vscode.nvim",
-    lazy = false,
-    priority = 800,
-    opts = {
-      style = "dark", -- "dark" or "light"
-    },
-    config = function()
-      vim.cmd("colorscheme gruvbox") -- <-- apply after plugin loads
-    end,
-  },
-
-  -- Show filename + current function
-
-  -- Lualine statusline
-  {
-    'nvim-lualine/lualine.nvim',
-    config = function()
-      local navic_ok, navic = pcall(require, 'nvim-navic')
-
-      require('lualine').setup({
-        options = {
-          -- available: vscode, gruvbox
-          theme = 'gruvbox',
-        },
-        sections = {
-          lualine_c = {
-            'filename',
-            {
-              function()
-                if navic_ok and navic.is_available() then
-                  return navic.get_location()
-                end
-                return ''
-              end,
-              cond = function()
-                return navic_ok and navic.is_available()
-              end,
-            },
-          },
-        },
-      })
-    end,
-  },
-
-  {
-    "SmiteshP/nvim-navic",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = function()
-      local navic = require("nvim-navic")
-
-      navic.setup({
-        highlight = true,
-        separator = " > ",
-        depth_limit = 5,
-        lazy_update_context = true,
-        auto_attach = true, -- automatically attach to LSPs
-      })
-
-      -- Winbar showing filename + current function
-      vim.o.winbar = "%f %{%v:lua.require'nvim-navic'.is_available() and require'nvim-navic'.get_location() or ''%}"
-    end,
-  },
-
-
-  -- Modicator: A minimal mode indicator for Neovim
-  {
-    'mawkler/modicator.nvim',
-    dependencies = 'mawkler/onedark.nvim', -- Add your colorscheme plugin here
-    init = function()
-      -- These are required for Modicator to work
-      vim.o.cursorline = true
-      vim.o.number = true
-      vim.o.termguicolors = true
-    end,
-    event = 'ModeChanged',
-    opts = {
-      show_warnings = false,
-      highlights = { defaults = { bold = true }, },
-    }
-  },
-  -- Smear Cursor
-  {
-    "sphamba/smear-cursor.nvim",
-    opts = {},
-  },
-  -- tiny-glimmer
-  {
-    "rachartier/tiny-glimmer.nvim",
-    event = "VeryLazy",
-    priority = 10, -- Low priority to catch other plugins' keybindings
-    config = function()
-      require("tiny-glimmer").setup()
-    end,
-  },
-  {
-    "petertriho/nvim-scrollbar",
-    config = function()
-      require("scrollbar").setup()
-    end,
-  },
-  {
-    "SmiteshP/nvim-navic",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = function()
-      require("nvim-navic").setup({
-        highlight = true,
-        separator = " ",
-        depth_limit = 5,
-        lazy_update_context = true, -- optional
-      })
-    end,
-  },
-  {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    },
-    keys = {
-      {
-        "<leader>?",
-        function()
-          require("which-key").show({ global = false })
-        end,
-        desc = "Buffer Local Keymaps (which-key)",
-      },
-    },
-  }
-}
+vim.pack.add({ "https://github.com/MunifTanjim/nui.nvim" })
+vim.pack.add({ "https://github.com/rcarriga/nvim-notify" })
+vim.pack.add({ "https://github.com/folke/noice.nvim" })
+require("notify").setup({ background_colour = "#282828" })
+require("noice").setup({ lsp = { override = { ["vim.lsp.util.convert_input_to_markdown_lines"] = true, ["vim.lsp.util.stylize_markdown"] = true, ["cmp.entry.get_documentation"] = true } }, presets = { bottom_search = true, command_palette = false, long_message_to_split = true, inc_rename = false, lsp_doc_border = false } })
+vim.pack.add({ "https://github.com/ellisonleao/gruvbox.nvim" })
+require("gruvbox").setup({ contrast = "soft" })
+vim.pack.add({ "https://github.com/nickkadutskyi/jb.nvim" })
+require("jb").setup({})
+vim.pack.add({ "https://github.com/Mofiqul/vscode.nvim" })
+require("vscode").setup({ style = "dark" })
+vim.cmd("colorscheme gruvbox")
+vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
+vim.pack.add({ "https://github.com/SmiteshP/nvim-navic" })
+local navic_ok, navic = pcall(require, 'nvim-navic')
+if navic_ok then
+  navic.setup({ highlight = true, separator = " > ", depth_limit = 5, lazy_update_context = true, auto_attach = true })
+  _G.navic_winbar = function()
+    if require('nvim-navic').is_available() then
+      return require('nvim-navic').get_location()
+    end
+    return ''
+  end
+  vim.o.winbar = "%f %{%v:lua.navic_winbar()%}"
+end
+vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
+require('lualine').setup({
+  options = { theme = 'gruvbox' },
+  sections = { lualine_c = { 'filename', { function() if navic_ok and navic.is_available() then return navic.get_location() end return '' end, cond = function() return navic_ok and navic.is_available() end } } },
+})
+vim.pack.add({ "https://github.com/mawkler/onedark.nvim" })
+vim.pack.add({ "https://github.com/mawkler/modicator.nvim" })
+vim.o.cursorline = true; vim.o.number = true; vim.o.termguicolors = true
+require("modicator").setup({ show_warnings = false, highlights = { defaults = { bold = true } } })
+vim.pack.add({ "https://github.com/sphamba/smear-cursor.nvim" })
+require("smear_cursor").setup({})
+vim.pack.add({ "https://github.com/rachartier/tiny-glimmer.nvim" })
+require("tiny-glimmer").setup()
+vim.pack.add({ "https://github.com/petertriho/nvim-scrollbar" })
+require("scrollbar").setup()
+vim.pack.add({ "https://github.com/folke/which-key.nvim" })
+require("which-key").setup({})
+vim.keymap.set("n", "<leader>?", function() require("which-key").show({ global = false }) end, { desc = "Buffer Local Keymaps (which-key)" })
