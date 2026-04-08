@@ -64,65 +64,22 @@ return {
     end,
   },
 
-  -- Show filename + current function
-
   -- Lualine statusline
   {
     'nvim-lualine/lualine.nvim',
     config = function()
-      local navic_ok, navic = pcall(require, 'nvim-navic')
-
       require('lualine').setup({
         options = {
-          -- available: vscode, gruvbox
           theme = 'gruvbox',
         },
-        sections = {
-          lualine_c = {
-            'filename',
-            {
-              function()
-                if navic_ok and navic.is_available() then
-                  return navic.get_location()
-                end
-                return ''
-              end,
-              cond = function()
-                return navic_ok and navic.is_available()
-              end,
-            },
-          },
-        },
       })
     end,
   },
-
-  {
-    "SmiteshP/nvim-navic",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = function()
-      local navic = require("nvim-navic")
-
-      navic.setup({
-        highlight = true,
-        separator = " > ",
-        depth_limit = 5,
-        lazy_update_context = true,
-        auto_attach = true, -- automatically attach to LSPs
-      })
-
-      -- Winbar showing filename + current function
-      vim.o.winbar = "%f %{%v:lua.require'nvim-navic'.is_available() and require'nvim-navic'.get_location() or ''%}"
-    end,
-  },
-
-
   -- Modicator: A minimal mode indicator for Neovim
   {
     'mawkler/modicator.nvim',
-    dependencies = 'mawkler/onedark.nvim', -- Add your colorscheme plugin here
+    dependencies = 'mawkler/onedark.nvim',
     init = function()
-      -- These are required for Modicator to work
       vim.o.cursorline = true
       vim.o.number = true
       vim.o.termguicolors = true
@@ -133,46 +90,34 @@ return {
       highlights = { defaults = { bold = true }, },
     }
   },
+
   -- Smear Cursor
   {
     "sphamba/smear-cursor.nvim",
     opts = {},
   },
+
   -- tiny-glimmer
   {
     "rachartier/tiny-glimmer.nvim",
     event = "VeryLazy",
-    priority = 10, -- Low priority to catch other plugins' keybindings
+    priority = 10,
     config = function()
       require("tiny-glimmer").setup()
     end,
   },
+
   {
     "petertriho/nvim-scrollbar",
     config = function()
       require("scrollbar").setup()
     end,
   },
-  {
-    "SmiteshP/nvim-navic",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = function()
-      require("nvim-navic").setup({
-        highlight = true,
-        separator = " ",
-        depth_limit = 5,
-        lazy_update_context = true, -- optional
-      })
-    end,
-  },
+
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    },
+    opts = {},
     keys = {
       {
         "<leader>?",
@@ -182,5 +127,5 @@ return {
         desc = "Buffer Local Keymaps (which-key)",
       },
     },
-  }
+  },
 }

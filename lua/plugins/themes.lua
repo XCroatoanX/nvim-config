@@ -31,18 +31,28 @@ return {
     end,
   },
   -- Lualine statusline
-  {
+{
     'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require('lualine').setup({
-        options = {
-          -- available: vscode, gruvbox
-          theme = 'gruvbox',
-        },
+        options = { theme = 'gruvbox' },
+        sections = {
+          lualine_z = {
+            {
+              -- Shows AI status (Idle, Thinking, etc.)
+              function()
+                local ok, opencode = pcall(require, "opencode")
+                return ok and opencode.statusline() or ""
+              end,
+              color = { fg = "#fe8019" }, -- Gruvbox Orange
+            },
+          }
+        }
       })
     end,
   },
-  {
+    {
     'mawkler/modicator.nvim',
     dependencies = 'mawkler/onedark.nvim', -- Add your colorscheme plugin here
     init = function()

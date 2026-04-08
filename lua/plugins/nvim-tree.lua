@@ -2,7 +2,6 @@ return {
   {
     "nvim-tree/nvim-tree.lua",
     version = "*",
-    lazy = false,
     dependencies = {
       "nvim-tree/nvim-web-devicons",
       "nvim-lua/plenary.nvim",
@@ -28,15 +27,12 @@ return {
           git_ignored = false,
         },
       })
-
-      -- Toggle nvim-tree with Ctrl+E
-      vim.keymap.set("n", "<C-e>", "<cmd>NvimTreeToggle<CR>", {
-        noremap = true,
-        silent = true,
-        desc = "Toggle file explorer",
-      })
     end,
+    keys = {
+      { "<C-e>", "<cmd>NvimTreeToggle<cr>", desc = "Toggle file explorer" },
+    },
   },
+
   {
     "antosha417/nvim-lsp-file-operations",
     dependencies = {

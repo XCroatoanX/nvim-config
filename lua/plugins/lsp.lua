@@ -3,17 +3,9 @@ return {
   dependencies = {
     { "mason-org/mason.nvim", opts = {} },
     "neovim/nvim-lspconfig",
-    "SmiteshP/nvim-navic",
   },
   config = function()
-    local navic = require("nvim-navic")
     local lspconfig = require("lspconfig")
-
-    local on_attach = function(client, bufnr)
-      if client.server_capabilities.documentSymbolProvider then
-        navic.attach(client, bufnr)
-      end
-    end
 
     require("mason-lspconfig").setup({
       handlers = {
