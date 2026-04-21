@@ -5,7 +5,7 @@ vim.pack.add({ "https://github.com/onsails/lspkind-nvim" })
 vim.pack.add({ "https://github.com/nvim-tree/nvim-web-devicons" })
 vim.pack.add({ "https://github.com/zbirenbaum/copilot.lua" })
 vim.pack.add({ "https://github.com/fang2hou/blink-copilot" })
-vim.pack.add({ { src = "https://github.com/saghen/blink.cmp", version = "v1" } })
+vim.pack.add({ { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*")} })
 local opts = {
   keymap = { preset = 'default', ['<CR>'] = { 'accept', 'fallback' } },
   appearance = { nerd_font_variant = 'mono' },
