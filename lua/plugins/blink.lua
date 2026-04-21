@@ -46,11 +46,10 @@ local opts = {
   },
   snippets = { preset = 'luasnip' },
 }
-require("blink.cmp").setup({
-  fuzzy = {
-    prebuilt_binaries = {
-      force_version = 'v1.10.1', -- This is the magic "fix" for non-lazy managers
-    }
-  }
-})
+opts.fuzzy = {
+  prebuilt_binaries = {
+    force_version = 'v1.10.1',
+  },
+}
+require("blink.cmp").setup(opts)
 require("luasnip.loaders.from_vscode").lazy_load()
