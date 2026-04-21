@@ -2,37 +2,33 @@ vim.pack.add({ "https://github.com/zbirenbaum/copilot.lua" })
 require("copilot").setup({ suggestion = { enabled = false }, panel = { enabled = false } })
 
 vim.pack.add({ "https://github.com/folke/snacks.nvim" })
-require("snacks").setup({ input = {}, picker = {}, terminal = {} })
-
 vim.pack.add({ "https://github.com/nickjvandyke/opencode.nvim" })
-local has_snacks, snacks = pcall(require, "snacks")
-if has_snacks then
-    snacks.setup({
-        input = {},
-        picker = {
-            actions = {
-                opencode_send = function(...) 
-                    return require("opencode").snacks_picker_send(...) 
-                end,
-            },
-            win = {
-                input = {
-                    keys = {
-                        ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
-                    },
+
+require("snacks").setup({
+    input = {},
+    terminal = {},
+    picker = {
+        actions = {
+            opencode_send = function(...) 
+                return require("opencode").snacks_picker_send(...) 
+            end,
+        },
+        win = {
+            input = {
+                keys = {
+                    ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
                 },
             },
         },
-    })
-end
+    },
+})
 
-vim.g.opencode_opts = {
-}
-
+vim.g.opencode_opts = {}
 vim.o.autoread = true 
 
 local opencode = require("opencode")
 
+-- Keymaps
 vim.keymap.set({ "n", "x" }, "<C-a>", function() opencode.ask("@this: ", { submit = true }) end, { desc = "Ask opencode…" })
 vim.keymap.set({ "n", "x" }, "<C-x>", function() opencode.select() end,                          { desc = "Execute opencode action…" })
 vim.keymap.set({ "n", "t" }, "<C-.>", function() opencode.toggle() end,                          { desc = "Toggle opencode" })
