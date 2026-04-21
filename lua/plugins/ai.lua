@@ -1,91 +1,43 @@
-return {
+vim.pack.add({ "https://github.com/zbirenbaum/copilot.lua" })
+require("copilot").setup({ suggestion = { enabled = false }, panel = { enabled = false } })
 
-  -- GitHub Copilot
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
-    end,
-  },
+vim.pack.add({ "https://github.com/folke/snacks.nvim" })
+vim.pack.add({ "https://github.com/nickjvandyke/opencode.nvim" })
 
-  -- OpenCode AI
-{
-    "nickjvandyke/opencode.nvim",
-    version = "*",
-    dependencies = {
-      {
-        "folke/snacks.nvim",
-        priority = 1000,
-        lazy = false,
-        -- Force install by removing 'optional = true'
-        opts = {
-          input = {},
-          picker = {
-            actions = {
-              opencode_send = function(...) return require("opencode").snacks_picker_send(...) end,
-            },
-            win = {
-              input = {
-                keys = { ["<a-a>"] = { "opencode_send", mode = { "n", "i" } } },
-              },
-            },
-          },
+require("snacks").setup({
+    input = {},
+    terminal = {},
+    picker = {
+        actions = {
+            opencode_send = function(...) 
+                return require("opencode").snacks_picker_send(...) 
+            end,
         },
-      },
+        win = {
+            input = {
+                keys = {
+                    ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+                },
+            },
+        },
     },
-    config = function()
-      -- THE "NICE" SETTINGS
-      vim.g.opencode_opts = {
-        lsp = { enabled = true }, -- AI-powered Hover and Code Actions
-        server = {
-          -- Uses Snacks Terminal for a better UI than the default Neovim terminal
-          toggle = function()
-            require('snacks.terminal').toggle('opencode --port 3923', {
-              win = {
-                position = 'right',
-                width = 0.35,
-                on_win = function(win)
-                  require('opencode.terminal').setup(win.win)
-                end,
-              },
-            })
-          end,
-        },
-      }
+})
 
-      vim.o.autoread = true
+vim.g.opencode_opts = {}
+vim.o.autoread = true 
 
-      local map = vim.keymap.set
-      
-      -- TOGGLE (The main one you were looking for)
-      -- Using <leader>oa (OpenCode Assistant)
-      map({ "n", "t" }, "<leader>oa", function() require("opencode").toggle() end, { desc = "Toggle OpenCode" })
+local opencode = require("opencode")
 
-      -- ASK
-      map({ "n", "x" }, "<leader>oq", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Quick Ask AI" })
-      
-      -- ACTIONS (The menu)
-      map({ "n", "x" }, "<leader>ox", function() require("opencode").select() end, { desc = "AI Actions" })
-      
-      -- CONTEXT
-      map("n", "ga", function() require("opencode").prompt("@this ") end, { desc = "Add to context" })
-      
-      -- Keep your math remaps if you like them
-      map("n", "+", "<C-a>", { desc = "Increment", noremap = true })
-      map("n", "-", "<C-x>", { desc = "Decrement", noremap = true })
+-- Keymaps
+vim.keymap.set({ "n", "x" }, "<C-a>", function() opencode.ask("@this: ", { submit = true }) end, { desc = "Ask opencode…" })
+vim.keymap.set({ "n", "x" }, "<C-x>", function() opencode.select() end,                          { desc = "Execute opencode action…" })
+vim.keymap.set({ "n", "t" }, "<C-.>", function() opencode.toggle() end,                          { desc = "Toggle opencode" })
 
-      -- Auto-notify when AI finishes a long task
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "OpencodeEvent:session.idle",
-        callback = function()
-          vim.notify("AI response complete", "info", { title = "OpenCode" })
-        end,
-      })
-    end,
-  },
-}
+vim.keymap.set({ "n", "x" }, "go",  function() return opencode.operator("@this ") end,        { desc = "Add range to opencode", expr = true })
+vim.keymap.set("n",          "goo", function() return opencode.operator("@this ") .. "_" end, { desc = "Add line to opencode", expr = true })
+
+vim.keymap.set("n", "<S-C-u>", function() opencode.command("session.half.page.up") end,   { desc = "Scroll opencode up" })
+vim.keymap.set("n", "<S-C-d>", function() opencode.command("session.half.page.down") end, { desc = "Scroll opencode down" })
+
+vim.keymap.set("n", "+", "<C-a>", { desc = "Increment under cursor", noremap = true })
+vim.keymap.set("n", "-", "<C-x>", { desc = "Decrement under cursor", noremap = true })

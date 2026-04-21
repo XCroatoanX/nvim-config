@@ -1,7 +1,2 @@
-return {
-  "andweeb/presence.nvim",
-  event = "VeryLazy",
-  config = function()
-    require("presence").setup({})
-  end,
-}
+vim.pack.add({ "https://github.com/andweeb/presence.nvim" })
+require("presence").setup({})
