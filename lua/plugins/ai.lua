@@ -10,5 +10,5 @@ vim.o.autoread = true
 local map = vim.keymap.set
 map({ "n", "x" }, "<leader>oq", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode" })
 map({ "n", "x" }, "<leader>ox", function() require("opencode").select() end, { desc = "Execute action" })
-map({ "n", "x" }, "ga", function() require("opencode").prompt("@this") end, { desc = "Add to context" })
+map({ "n", "x" }, "<leader>og", function() require("opencode").prompt("@this") end, { desc = "Add to context" })
 map({ "n", "t" }, "<leader>oa", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
