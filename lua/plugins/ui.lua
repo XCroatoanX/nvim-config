@@ -11,22 +11,9 @@ vim.pack.add({ "https://github.com/Mofiqul/vscode.nvim" })
 require("vscode").setup({ style = "dark" })
 vim.cmd("colorscheme gruvbox")
 vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
-vim.pack.add({ "https://github.com/SmiteshP/nvim-navic" })
-local navic_ok, navic = pcall(require, 'nvim-navic')
-if navic_ok then
-  navic.setup({ highlight = true, separator = " > ", depth_limit = 5, lazy_update_context = true, auto_attach = true })
-  _G.navic_winbar = function()
-    if require('nvim-navic').is_available() then
-      return require('nvim-navic').get_location()
-    end
-    return ''
-  end
-  vim.o.winbar = "%f %{%v:lua.navic_winbar()%}"
-end
 vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
 require('lualine').setup({
   options = { theme = 'gruvbox' },
-  sections = { lualine_c = { 'filename', { function() if navic_ok and navic.is_available() then return navic.get_location() end return '' end, cond = function() return navic_ok and navic.is_available() end } } },
 })
 vim.pack.add({ "https://github.com/mawkler/onedark.nvim" })
 vim.pack.add({ "https://github.com/mawkler/modicator.nvim" })

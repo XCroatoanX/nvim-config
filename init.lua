@@ -11,4 +11,3 @@ local plugin_files = vim.fn.glob(vim.fn.stdpath("config") .. "/lua/plugins/*.lua
 for _, file in ipairs(plugin_files) do
   dofile(file)
 end
-

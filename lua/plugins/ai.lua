@@ -4,13 +4,44 @@ require("copilot").setup({ suggestion = { enabled = false }, panel = { enabled =
 vim.pack.add({ "https://github.com/folke/snacks.nvim" })
 require("snacks").setup({ input = {}, picker = {}, terminal = {} })
 
-vim.pack.add({ "https://github.com/NickvanDyke/opencode.nvim" })
-vim.g.opencode_opts = { port = 3923 }
-vim.o.autoread = true
-local map = vim.keymap.set
-map({ "n", "x" }, "<C-a>", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode" })
-map({ "n", "x" }, "<C-x>", function() require("opencode").select() end, { desc = "Execute action" })
-map({ "n", "x" }, "ga", function() require("opencode").prompt("@this") end, { desc = "Add to context" })
-map({ "n", "t" }, "<C-.>", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
-map('n', '+', '<C-a>', { desc = 'Increment', noremap = true })
-map('n', '-', '<C-x>', { desc = 'Decrement', noremap = true })
+vim.pack.add({ "https://github.com/nickjvandyke/opencode.nvim" })
+local has_snacks, snacks = pcall(require, "snacks")
+if has_snacks then
+    snacks.setup({
+        input = {},
+        picker = {
+            actions = {
+                opencode_send = function(...) 
+                    return require("opencode").snacks_picker_send(...) 
+                end,
+            },
+            win = {
+                input = {
+                    keys = {
+                        ["<a-a>"] = { "opencode_send", mode = { "n", "i" } },
+                    },
+                },
+            },
+        },
+    })
+end
+
+vim.g.opencode_opts = {
+}
+
+vim.o.autoread = true 
+
+local opencode = require("opencode")
+
+vim.keymap.set({ "n", "x" }, "<C-a>", function() opencode.ask("@this: ", { submit = true }) end, { desc = "Ask opencode…" })
+vim.keymap.set({ "n", "x" }, "<C-x>", function() opencode.select() end,                          { desc = "Execute opencode action…" })
+vim.keymap.set({ "n", "t" }, "<C-.>", function() opencode.toggle() end,                          { desc = "Toggle opencode" })
+
+vim.keymap.set({ "n", "x" }, "go",  function() return opencode.operator("@this ") end,        { desc = "Add range to opencode", expr = true })
+vim.keymap.set("n",          "goo", function() return opencode.operator("@this ") .. "_" end, { desc = "Add line to opencode", expr = true })
+
+vim.keymap.set("n", "<S-C-u>", function() opencode.command("session.half.page.up") end,   { desc = "Scroll opencode up" })
+vim.keymap.set("n", "<S-C-d>", function() opencode.command("session.half.page.down") end, { desc = "Scroll opencode down" })
+
+vim.keymap.set("n", "+", "<C-a>", { desc = "Increment under cursor", noremap = true })
+vim.keymap.set("n", "-", "<C-x>", { desc = "Decrement under cursor", noremap = true })
