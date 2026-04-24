@@ -16,7 +16,9 @@ local function setup_server(server_name, opts)
   vim.lsp.enable(server_name)
 end
 
-require("mason-lspconfig").setup({})
+require("mason-lspconfig").setup({
+  ensure_installed = { "copilot" },
+})
 setup_server("yamlls", {
   settings = {
     yaml = {
