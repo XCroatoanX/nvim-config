@@ -10,7 +10,6 @@ require("jb").setup({})
 vim.pack.add({ "https://github.com/Mofiqul/vscode.nvim" })
 require("vscode").setup({ style = "dark" })
 vim.cmd("colorscheme gruvbox")
-vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
 vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
 require('lualine').setup({
   options = { theme = 'gruvbox' },

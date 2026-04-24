@@ -1,4 +1,3 @@
-vim.pack.add({ "https://github.com/nvim-tree/nvim-web-devicons" })
 vim.pack.add({ "https://github.com/akinsho/bufferline.nvim" })
 local diagnostics_indicator = function(count, level, diagnostics_dict, context)
   local s = " "
@@ -20,7 +19,7 @@ require("bufferline").setup {
     always_show_bufferline = true,
     right_mouse_command = "",
     hover = { enabled = true, delay = 200, reveal = { "close" } },
-    offsets = { { filetype = "neo-tree", text = "Explorer", highlight = "Directory", text_align = "left" } },
+    offsets = { { filetype = "NvimTree", text = "Explorer", highlight = "Directory", text_align = "left" } },
     groups = {
       options = { toggle_hidden_on_enter = true },
       items = {

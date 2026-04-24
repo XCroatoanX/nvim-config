@@ -1,9 +1,9 @@
-vim.pack.add({ "https://github.com/nvim-lua/plenary.nvim" })
 vim.pack.add({ "https://github.com/tsakirist/telescope-lazy.nvim" })
 vim.pack.add({ "https://github.com/nvim-telescope/telescope-fzy-native.nvim" })
 vim.pack.add({ "https://github.com/nvim-telescope/telescope.nvim" })
 local telescope = require("telescope")
 local actions = require("telescope.actions")
+local root = require("config.root")
 telescope.setup({
   defaults = {
     prompt_prefix = "🔍 ", selection_caret = "➤ ", path_display = { "smart" },
@@ -20,8 +20,12 @@ telescope.setup({
 pcall(telescope.load_extension, "fzy_native")
 local builtin = require("telescope.builtin")
 local map = vim.keymap.set
-map("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
-map("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+map("n", "<leader>ff", function()
+  builtin.find_files({ cwd = root.get(0) })
+end, { desc = "Telescope find files (project root)" })
+map("n", "<leader>fg", function()
+  builtin.live_grep({ cwd = root.get(0) })
+end, { desc = "Telescope live grep (project root)" })
 map("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 map("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
 map("n", "<leader>fo", builtin.oldfiles, { desc = "Telescope old files" })

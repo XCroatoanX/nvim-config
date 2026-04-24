@@ -2,12 +2,14 @@ vim.pack.add({ "https://github.com/xzbdmw/colorful-menu.nvim" })
 vim.pack.add({ "https://github.com/L3MON4D3/LuaSnip" })
 vim.pack.add({ "https://github.com/rafamadriz/friendly-snippets" })
 vim.pack.add({ "https://github.com/onsails/lspkind-nvim" })
-vim.pack.add({ "https://github.com/nvim-tree/nvim-web-devicons" })
-vim.pack.add({ "https://github.com/zbirenbaum/copilot.lua" })
-vim.pack.add({ "https://github.com/fang2hou/blink-copilot" })
-vim.pack.add({ { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*")} })
+vim.pack.add({ { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("*")} })
 local opts = {
-  keymap = { preset = 'default', ['<CR>'] = { 'accept', 'fallback' } },
+  keymap = {
+    preset = 'default',
+    ['<CR>'] = { 'accept', 'fallback' },
+    ['<Tab>'] = { 'select_and_accept', 'snippet_forward', 'fallback' },
+    ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
+  },
   appearance = { nerd_font_variant = 'mono' },
   completion = {
     menu = {
@@ -19,14 +21,12 @@ local opts = {
             ellipsis = false,
             text = function(ctx)
               local lspkind = require("lspkind"); local icon = ctx.kind_icon
-              if ctx.source_name == "copilot" then icon = "" 
-              elseif ctx.source_name == "Path" then local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label); if dev_icon then icon = dev_icon end
+              if ctx.source_name == "Path" then local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label); if dev_icon then icon = dev_icon end
               else icon = lspkind.symbolic(ctx.kind, { mode = "symbol" }) end
               return " " .. (icon or " ") .. " "
             end,
             highlight = function(ctx)
               local hl = ctx.kind_hl
-              if ctx.source_name == "copilot" then return "CmpItemKindCopilot" end
               if ctx.source_name == "Path" then local _, dev_hl = require("nvim-web-devicons").get_icon(ctx.label); if dev_hl then hl = dev_hl end end
               return hl
             end,
@@ -41,16 +41,33 @@ local opts = {
     documentation = { window = { border = 'single' }, auto_show = true },
   },
   sources = {
-    default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
-    providers = { copilot = { name = "copilot", module = "blink-copilot", score_offset = 100, async = true, opts = { max_completions = 3 } } },
+    default = { 'lsp', 'path', 'snippets', 'buffer' },
   },
   snippets = { preset = 'luasnip' },
 }
-require("blink.cmp").setup({
-  fuzzy = {
-    prebuilt_binaries = {
-      force_version = 'v1.10.1', -- This is the magic "fix" for non-lazy managers
-    }
+
+if vim.snippet then
+  opts.keymap['<C-l>'] = {
+    function(cmp)
+      if vim.snippet.active({ direction = 1 }) then
+        vim.snippet.jump(1)
+        return true
+      end
+      return cmp.select_and_accept()
+    end,
+    'fallback',
   }
-})
+  opts.keymap['<C-h>'] = {
+    function()
+      if vim.snippet.active({ direction = -1 }) then
+        vim.snippet.jump(-1)
+        return true
+      end
+      return false
+    end,
+    'fallback',
+  }
+end
+
+require("blink.cmp").setup(opts)
 require("luasnip.loaders.from_vscode").lazy_load()

@@ -1,5 +1,3 @@
-vim.pack.add({ "https://github.com/nvim-tree/nvim-web-devicons" })
-vim.pack.add({ "https://github.com/nvim-lua/plenary.nvim" })
 vim.pack.add({ "https://github.com/nvim-tree/nvim-tree.lua" })
 require("nvim-tree").setup({
   hijack_cursor = true, sync_root_with_cwd = true, respect_buf_cwd = true,

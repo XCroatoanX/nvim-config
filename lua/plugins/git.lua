@@ -1,5 +1,4 @@
 vim.pack.add({ "https://github.com/lewis6991/gitsigns.nvim" })
 require("gitsigns").setup({})
-vim.pack.add({ "https://github.com/nvim-lua/plenary.nvim" })
 vim.pack.add({ "https://github.com/kdheepak/lazygit.nvim" })
 vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
