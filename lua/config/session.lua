@@ -1,5 +1,9 @@
 local session_file = vim.fn.stdpath("state") .. "/session.vim"
 
+local function session_exists()
+  return vim.fn.filereadable(session_file) == 1
+end
+
 local function save_session()
   vim.fn.mkdir(vim.fn.fnamemodify(session_file, ":h"), "p")
   vim.cmd("mksession! " .. vim.fn.fnameescape(session_file))
@@ -7,7 +11,7 @@ local function save_session()
 end
 
 local function load_session()
-  if vim.fn.filereadable(session_file) == 0 then
+  if not session_exists() then
     vim.notify("No session found", vim.log.levels.WARN, { title = "Session" })
     return
   end
@@ -16,7 +20,7 @@ local function load_session()
 end
 
 local function delete_session()
-  if vim.fn.filereadable(session_file) == 1 then
+  if session_exists() then
     vim.fn.delete(session_file)
     vim.notify("Session deleted", vim.log.levels.INFO, { title = "Session" })
   else

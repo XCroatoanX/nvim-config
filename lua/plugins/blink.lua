@@ -1,5 +1,4 @@
 vim.pack.add({ "https://github.com/xzbdmw/colorful-menu.nvim" })
-vim.pack.add({ "https://github.com/L3MON4D3/LuaSnip" })
 vim.pack.add({ "https://github.com/rafamadriz/friendly-snippets" })
 vim.pack.add({ "https://github.com/onsails/lspkind-nvim" })
 vim.pack.add({ { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("*")} })
@@ -40,10 +39,21 @@ local opts = {
     },
     documentation = { window = { border = 'single' }, auto_show = true },
   },
+  signature = {
+    enabled = true,
+    window = { border = 'single' },
+  },
   sources = {
     default = { 'lsp', 'path', 'snippets', 'buffer' },
+    providers = {
+      snippets = {
+        opts = {
+          friendly_snippets = true,
+        },
+      },
+    },
   },
-  snippets = { preset = 'luasnip' },
+  snippets = { preset = 'default' },
 }
 
 if vim.snippet then
@@ -70,4 +80,25 @@ if vim.snippet then
 end
 
 require("blink.cmp").setup(opts)
-require("luasnip.loaders.from_vscode").lazy_load()
+
+local blink_copilot_group = vim.api.nvim_create_augroup("blink_copilot_suggestions", { clear = true })
+
+vim.api.nvim_create_autocmd("User", {
+  group = blink_copilot_group,
+  pattern = "BlinkCmpMenuOpen",
+  callback = function()
+    local ok, copilot_suggestion = pcall(require, "copilot.suggestion")
+    if ok and copilot_suggestion.dismiss then
+      copilot_suggestion.dismiss()
+    end
+    vim.b.copilot_suggestion_hidden = true
+  end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+  group = blink_copilot_group,
+  pattern = "BlinkCmpMenuClose",
+  callback = function()
+    vim.b.copilot_suggestion_hidden = false
+  end,
+})

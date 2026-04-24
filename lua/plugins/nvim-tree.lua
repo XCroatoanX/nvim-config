@@ -1,6 +1,8 @@
 vim.pack.add({ "https://github.com/nvim-tree/nvim-tree.lua" })
 require("nvim-tree").setup({
-  hijack_cursor = true, sync_root_with_cwd = true, respect_buf_cwd = true,
+  hijack_cursor = true,
+  sync_root_with_cwd = true,
+  respect_buf_cwd = true,
   update_focused_file = { enable = true, update_root = true },
   view = { side = "right", width = 35 },
   renderer = { group_empty = true },

@@ -7,7 +7,7 @@ local diagnostics_indicator = function(count, level, diagnostics_dict, context)
   end
   return s
 end
-require("bufferline").setup {
+require("bufferline").setup({
   options = {
     mode = "buffers",
     numbers = "ordinal",
@@ -19,13 +19,32 @@ require("bufferline").setup {
     always_show_bufferline = true,
     right_mouse_command = "",
     hover = { enabled = true, delay = 200, reveal = { "close" } },
-    offsets = { { filetype = "NvimTree", text = "Explorer", highlight = "Directory", text_align = "left" } },
+    offsets = {
+      { filetype = "NvimTree", text = "Explorer", highlight = "Directory", text_align = "left" },
+    },
     groups = {
       options = { toggle_hidden_on_enter = true },
       items = {
-        { name = "Tests", highlight = { underline = true, sp = "blue" }, priority = 2, icon = " ", matcher = function(buf) return vim.api.nvim_buf_get_name(buf.id):match('%_test') or vim.api.nvim_buf_get_name(buf.id):match('%_spec') end },
-        { name = "Docs", highlight = { undercurl = true, sp = "green" }, auto_close = false, matcher = function(buf) return vim.api.nvim_buf_get_name(buf.id):match('%.md') or vim.api.nvim_buf_get_name(buf.id):match('%.txt') end }
-      }
-    }
+        {
+          name = "Tests",
+          highlight = { underline = true, sp = "blue" },
+          priority = 2,
+          icon = " ",
+          matcher = function(buf)
+            local name = vim.api.nvim_buf_get_name(buf.id)
+            return name:match("%_test") or name:match("%_spec")
+          end,
+        },
+        {
+          name = "Docs",
+          highlight = { undercurl = true, sp = "green" },
+          auto_close = false,
+          matcher = function(buf)
+            local name = vim.api.nvim_buf_get_name(buf.id)
+            return name:match("%.md") or name:match("%.txt")
+          end,
+        },
+      },
+    },
   },
-}
+})

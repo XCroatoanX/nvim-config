@@ -3,6 +3,8 @@ require("mason").setup({})
 vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
 vim.pack.add({ "https://github.com/mason-org/mason-lspconfig.nvim" })
 
+local mason_lspconfig = require("mason-lspconfig")
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 local ok_blink, blink = pcall(require, "blink.cmp")
 if ok_blink then
@@ -16,9 +18,16 @@ local function setup_server(server_name, opts)
   vim.lsp.enable(server_name)
 end
 
-require("mason-lspconfig").setup({
-  ensure_installed = { "copilot" },
+local special_servers = {
+  yamlls = true,
+  copilot = true,
+}
+
+mason_lspconfig.setup({
+  ensure_installed = { "yamlls" },
+  automatic_installation = true,
 })
+
 setup_server("yamlls", {
   settings = {
     yaml = {
@@ -35,12 +44,10 @@ if vim.fn.executable("copilot-language-server") == 1 then
   })
 end
 
-for _, server_name in ipairs(require("mason-lspconfig").get_installed_servers()) do
-  if server_name ~= "yamlls" and server_name ~= "copilot" then
+mason_lspconfig.setup_handlers({
+  function(server_name)
+    if not special_servers[server_name] then
     setup_server(server_name)
-  else
-    if server_name == "yamlls" then
-      vim.lsp.enable("yamlls")
     end
   end
-end
+})

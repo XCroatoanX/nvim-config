@@ -18,13 +18,12 @@ function M.get(bufnr)
     return cwd
   end
 
-  local root = vim.fs.root(path, root_markers)
-  return root or vim.fs.dirname(path) or cwd
+  return vim.fs.root(path, root_markers) or vim.fs.dirname(path) or cwd
 end
 
 function M.cd(bufnr)
   local root = M.get(bufnr)
-  vim.cmd.cd(vim.fn.fnameescape(root))
+  vim.cmd.tcd(vim.fn.fnameescape(root))
   vim.notify("cwd -> " .. root, vim.log.levels.INFO, { title = "Project root" })
 end
 
