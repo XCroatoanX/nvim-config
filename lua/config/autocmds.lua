@@ -21,6 +21,18 @@ local function toggle_feature(has_feature, enable, disable)
   disable(not enabled)
 end
 
+vim.api.nvim_create_autocmd("FocusLost", {
+  callback = function()
+    if vim.bo.buftype ~= "" then
+      return
+    end
+
+    if vim.bo.modified then
+      vim.cmd("silent! noautocmd write")
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("LspAttach", {
   group = lsp_group,
   callback = function(event)

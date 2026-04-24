@@ -44,10 +44,8 @@ if vim.fn.executable("copilot-language-server") == 1 then
   })
 end
 
-mason_lspconfig.setup_handlers({
-  function(server_name)
-    if not special_servers[server_name] then
+for _, server_name in ipairs(mason_lspconfig.get_installed_servers()) do
+  if not special_servers[server_name] then
     setup_server(server_name)
-    end
   end
-})
+end
