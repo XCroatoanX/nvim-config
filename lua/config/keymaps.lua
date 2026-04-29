@@ -7,3 +7,8 @@ vim.keymap.set('n', '<leader>pp', '<cmd>ProjectRootPrint<cr>', { desc = 'Print p
 vim.keymap.set('n', '<leader>ss', '<cmd>SessionSave<cr>', { desc = 'Save session' })
 vim.keymap.set('n', '<leader>sl', '<cmd>SessionLoad<cr>', { desc = 'Load session' })
 vim.keymap.set('n', '<leader>sd', '<cmd>SessionDelete<cr>', { desc = 'Delete session' })
+vim.keymap.set('i', '<C-CR>', function()
+  if not vim.lsp.inline_completion.get() then
+    return '<CR>'
+  end
+end, { expr = true, replace_keycodes = true, desc = 'Accept LSP inline completion or insert newline' })
