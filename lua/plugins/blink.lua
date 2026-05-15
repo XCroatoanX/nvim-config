@@ -1,7 +1,15 @@
 vim.pack.add({ "https://github.com/xzbdmw/colorful-menu.nvim" })
 vim.pack.add({ "https://github.com/rafamadriz/friendly-snippets" })
 vim.pack.add({ "https://github.com/onsails/lspkind-nvim" })
-vim.pack.add({ { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("*")} })
+vim.pack.add({ { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("*") } })
+vim.pack.add({ "https://github.com/folke/lazydev.nvim" })
+
+require("lazydev").setup({
+  library = {
+    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+  },
+})
+
 local opts = {
   keymap = {
     preset = 'default',
@@ -20,19 +28,30 @@ local opts = {
             ellipsis = false,
             text = function(ctx)
               local lspkind = require("lspkind"); local icon = ctx.kind_icon
-              if ctx.source_name == "Path" then local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label); if dev_icon then icon = dev_icon end
-              else icon = lspkind.symbolic(ctx.kind, { mode = "symbol" }) end
+              if ctx.source_name == "Path" then
+                local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label); if dev_icon then icon = dev_icon end
+              else
+                icon = lspkind.symbolic(ctx.kind, { mode = "symbol" })
+              end
               return " " .. (icon or " ") .. " "
             end,
             highlight = function(ctx)
               local hl = ctx.kind_hl
-              if ctx.source_name == "Path" then local _, dev_hl = require("nvim-web-devicons").get_icon(ctx.label); if dev_hl then hl = dev_hl end end
+              if ctx.source_name == "Path" then
+                local _, dev_hl = require("nvim-web-devicons").get_icon(ctx.label); if dev_hl then hl = dev_hl end
+              end
               return hl
             end,
           },
           label = {
-            text = function(ctx) local success, node = pcall(require("colorful-menu").blink_components_text, ctx); return success and node or ctx.label end,
-            highlight = function(ctx) local success, hl = pcall(require("colorful-menu").blink_components_highlight, ctx); return success and hl or ctx.label_hl end,
+            text = function(ctx)
+              local success, node = pcall(require("colorful-menu").blink_components_text, ctx); return success and node or
+              ctx.label
+            end,
+            highlight = function(ctx)
+              local success, hl = pcall(require("colorful-menu").blink_components_highlight, ctx); return success and hl or
+              ctx.label_hl
+            end,
           },
         },
       },
@@ -44,8 +63,9 @@ local opts = {
     window = { border = 'single' },
   },
   sources = {
-    default = { 'lsp', 'path', 'snippets', 'buffer' },
+    default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
     providers = {
+      lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
       snippets = {
         opts = {
           friendly_snippets = true,
