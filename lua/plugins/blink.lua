@@ -21,6 +21,7 @@ local opts = {
   completion = {
     menu = {
       border = 'single',
+      winhighlight = "Normal:Pmenu,FloatBorder:DialogFloatBorder,CursorLine:PmenuSel,Search:None",
       draw = {
         columns = { { "kind_icon" }, { "label", gap = 1 } },
         components = {
@@ -56,7 +57,13 @@ local opts = {
         },
       },
     },
-    documentation = { window = { border = 'single' }, auto_show = true },
+    documentation = {
+      window = {
+        border = 'single',
+        winhighlight = "Normal:Pmenu,FloatBorder:DialogFloatBorder,CursorLine:PmenuSel,Search:None",
+      },
+      auto_show = true,
+    },
   },
   signature = {
     enabled = true,

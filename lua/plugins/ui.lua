@@ -18,12 +18,12 @@ require("noice").setup({
     lsp_doc_border = false,
   },
 })
-vim.pack.add({ "https://github.com/ellisonleao/gruvbox.nvim" })
-require("gruvbox").setup({ contrast = "soft" })
-vim.cmd("colorscheme gruvbox")
+vim.pack.add({ "https://github.com/nickkadutskyi/jb.nvim" })
+
+vim.cmd("colorscheme jb")
 vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
 require("lualine").setup({
-  options = { theme = "gruvbox" },
+  options = { theme = "jb" },
 })
 vim.pack.add({ "https://github.com/mawkler/modicator.nvim" })
 vim.opt.cursorline = true
