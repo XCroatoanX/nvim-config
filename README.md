@@ -1,69 +1,73 @@
 # nvim-config
-My neovim config :D
+My custom, high-performance Neovim configuration built with native packages.
 
 ![Neovim Screenshot](https://github.com/XCroatoanX/nvim-config/blob/master/nvim-screenshot.png?raw=true)
 
 ## Prerequisites
-For this config to work, you need to have `npm`, `neovim`, `git`, `tree-sitter-cli` (install with npm),`fd`, `ripgrep`, `lazygit` preinstalled
 
-## How to use
-1. Install neovim latest
-2. Install a nerd font, like Fire Code Nerd
-3. Clone this config:<br>
-**Linux / Mac** = `git clone https://github.com/XCroatoanX/nvim-config.git ~/.config/nvim/`<br>
-**Windows** = `git clone https://github.com/XCroatoanX/nvim-config.git ~/AppData/local/nvim/`
-4. Open neovim, everything will install automatically
+For this configuration to run flawlessly, ensure the following native binaries are pre-installed on your system:
 
-## Cheatsheet
-### nvim-tree
-For opening file manager, use `NvimTreeOpen` or `ctrl + e`
-* To create a file, press `a`
-* To edit a file, press `r`
-* For details, press `i`
-* For opening, press `t`
+* Core Builders: git, rust (cargo), and system build essentials (base-devel or build-essential) for compiling native extensions.
+* System Finders: fd (modern find tool) and ripgrep (rg for live grepping).
+* Git Interface: lazygit
+* Font: A patched Nerd Font (e.g., Fira Code Nerd Font) to render structural symbols and file icons properly.
 
-### LSP Install
-* To install an LSP server, use `:Mason` and install what you need.
-* LSP setup is handled by `mason-lspconfig` + `nvim-lspconfig`.
+## Installation & Setup
 
-### Telescope
-To search for a file, use `Telescope find_files` and search for filename or content
+1. Make sure you have Neovim (v0.12+) installed.
+2. Clone this repository directly into your Neovim configuration directory:
 
-### Project Root
-* Set cwd to detected project root: `<leader>pr`
-* Print detected project root: `<leader>pp`
-* Command alternatives: `:ProjectRoot` and `:ProjectRootPrint`
+   Linux / macOS:
+   git clone [https://github.com/XCroatoanX/nvim-config.git](https://github.com/XCroatoanX/nvim-config.git) ~/.config/nvim/
 
-### Sessions
-* Save session: `<leader>ss` (or `:SessionSave`)
-* Load session: `<leader>sl` (or `:SessionLoad`)
-* Delete session: `<leader>sd` (or `:SessionDelete`)
+   Windows:
+   git clone [https://github.com/XCroatoanX/nvim-config.git](https://github.com/XCroatoanX/nvim-config.git) ~/AppData/Local/nvim/
 
-### Treesitter
-* Syntax highlighting and indentation are enabled through Treesitter.
-* Incremental selection keymaps:
-  * Init/increase node: `ctrl + space`
-  * Increase scope: `ctrl + s`
-  * Decrease node: `alt + space`
+3. Open Neovim. The native package architecture (vim.pack) will automatically fetch, link, and compile required plugin libraries (including compiling the ultra-fast Rust fuzzy-matching engine for blink.cmp).
 
-### AI
-* Ask opencode about current context: `<leader>oa`
-* Run opencode action selector: `<leader>ox`
-* Toggle opencode terminal: `ctrl + .`
-* Accept inline AI suggestion: `tab`
-* Next/previous inline AI suggestion: `alt + ]` / `alt + [`
-* Toggle inline AI suggestions in current buffer: `<leader>uc`
+---
 
-### Copilot LSP
-* Recommended: install `copilot-language-server` via `:Mason` (package name: `copilot-language-server`).
-* Alternative: install it manually and make sure `copilot-language-server` is in your `PATH`.
-* Sign in from Neovim with `:LspCopilotSignIn` in a buffer where Copilot is attached.
-* Sign out with `:LspCopilotSignOut` in a buffer where Copilot is attached.
+## Component Cheatsheet
 
-### DAP
-Documentation will come after implementation
+### 📂 File Management (nvim-tree)
+* Ctrl + e : Toggle file tree sidebar explorer.
+* a : Create a new file or directory inside the active folder.
+* r : Rename a file or folder.
+* Enter : Open selected file or expand directory tree.
 
-### Lazygit
-To use LazyGit, you have to be in normal mode. Press `space` and `lg`.
+### 🔍 Search & Discovery (telescope.nvim & snacks.nvim)
+* <leader>ff : Find files (automatically anchored to the project root directory).
+* <leader>fg : Live grep search string across the project.
+* <leader>fb : List active open buffers.
+* <leader>fo : Show recently opened files history.
+* <leader>fh : Search native Neovim help tags.
 
-More info will follow
+### 🤖 AI Engineering (opencode.nvim & Native Copilot)
+* <leader>oa : Ask Opencode an LLM question about the active context buffer (@this).
+* <leader>ox : Open the interactive action selection menu.
+* Ctrl + . : Toggle the integrated Opencode processing terminal panel.
+* go / goo : Add an operator range or targeted line directly into the context pool.
+* Shift + Ctrl + u / Shift + Ctrl + d : Scroll the AI feedback panel up or down.
+* <a-a> : (Inside Snacks Picker) Stream selected files straight to your active AI session.
+
+> Copilot Configuration: Run :LspCopilotSignIn within any active workspace buffer to authenticate your connection. Run :LspCopilotSignOut to disconnect.
+
+### ⚡ Autocompletion (blink.cmp)
+* <CR> : Accept highlighted autocompletion entry.
+* <Tab> / <S-Tab> : Step forward or step backward through active completion choices and snippets.
+
+### 🌳 Structural Code Control (Treesitter)
+* Ctrl + Space : Initialize target selection scope / Expand active node context outward.
+
+### 🛠️ Diagnostics & Code Health (trouble.nvim)
+* <leader>xx : Toggle the aggregate global diagnostics layout panel.
+* <leader>xX : Filter diagnostics down strictly to the local active buffer file.
+* <leader>xq : Toggle local quickfix output list.
+
+### ⚙️ Package Management & LSP Configuration (mason.nvim)
+* Execute :Mason to open the package server controller.
+* LSP setups are automatically wired up to track active packages via mason-lspconfig.
+
+### 🚀 Miscellaneous Utilities
+* <leader>lg : Open floating lazygit UI interface context.
+* + / - : Increment or decrement the numbers positioned under your editing cursor.

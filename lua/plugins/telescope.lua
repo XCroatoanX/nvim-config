@@ -1,4 +1,3 @@
-vim.pack.add({ "https://github.com/tsakirist/telescope-lazy.nvim" })
 vim.pack.add({ "https://github.com/nvim-telescope/telescope-fzy-native.nvim" })
 vim.pack.add({ "https://github.com/nvim-telescope/telescope.nvim" })
 local telescope = require("telescope")
