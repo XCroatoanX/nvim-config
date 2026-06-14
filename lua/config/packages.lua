@@ -1,5 +1,5 @@
 local function update_packages()
-  vim.pack.update()
+    vim.pack.update()
 end
 
 local command_opts = { desc = "Update vim.pack packages" }
