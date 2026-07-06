@@ -25,7 +25,6 @@ vim.keymap.set("n", "<leader>?", function()
     require("which-key").show({ global = false })
 end, { desc = "Buffer Local Keymaps (which-key)" })
 
-vim.pack.add({ "https://github.com/MunifTanjim/nui.nvim" })
 vim.pack.add({ "https://github.com/rcarriga/nvim-notify" })
 
 vim.pack.add({ "https://github.com/folke/noice.nvim" })
