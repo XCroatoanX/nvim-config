@@ -6,6 +6,9 @@ require("lualine").setup({
     options = { theme = "catppuccin-nvim" },
 })
 vim.pack.add({ "https://github.com/mawkler/modicator.nvim" })
+vim.opt.cursorline = true
+vim.opt.number = true
+vim.opt.termguicolors = true
 require("modicator").setup({
     show_warnings = false,
     highlights = { defaults = { bold = true } },
@@ -41,9 +44,4 @@ require("noice").setup({
         inc_rename = false,
         lsp_doc_border = false,
     },
-})
-
-vim.pack.add({ { src = "https://github.com/jtprogru/pack-ui.nvim" } })
-require("pack-ui").setup({
-    auto_check = true
 })
