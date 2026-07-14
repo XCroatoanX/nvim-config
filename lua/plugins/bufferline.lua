@@ -1,4 +1,5 @@
 vim.pack.add({ "https://github.com/akinsho/bufferline.nvim" })
+
 local diagnostics_indicator = function(count, level, diagnostics_dict, context)
     local s = " "
     for e, n in pairs(diagnostics_dict) do
@@ -7,6 +8,7 @@ local diagnostics_indicator = function(count, level, diagnostics_dict, context)
     end
     return s
 end
+
 require("bufferline").setup({
     options = {
         mode = "buffers",
@@ -20,7 +22,13 @@ require("bufferline").setup({
         right_mouse_command = "",
         hover = { enabled = true, reveal = { "close" } },
         offsets = {
-            { filetype = "NvimTree", text = "Explorer", highlight = "Directory", text_align = "left" },
+            {
+                filetype = "neo-tree",
+                text = "Neo-tree",
+                highlight = "Directory",
+                text_align = "left",
+                separator = true,
+            },
         },
         groups = {
             options = {
@@ -30,12 +38,10 @@ require("bufferline").setup({
                 {
                     name = "Tests",
                     highlight = { underline = true, sp = "blue" },
-                    auto_close = false,
                     priority = 2,
                     icon = " ",
                     matcher = function(buf)
-                        local name = vim.api.nvim_buf_get_name(buf.id)
-                        return name:match("%_test") or name:match("%_spec")
+                        return buf.path:match('_test') or buf.path:match('_spec')
                     end,
                 },
                 {
@@ -43,15 +49,13 @@ require("bufferline").setup({
                     highlight = { undercurl = true, sp = "green" },
                     auto_close = false,
                     matcher = function(buf)
-                        local name = vim.api.nvim_buf_get_name(buf.id)
-                        return name:match("%.md") or name:match("%.txt")
+                        return buf.path:match('%.md$') or buf.path:match('%.txt$')
                     end,
-                    separator = { -- Optional
+                    separator = {
                         style = require('bufferline.groups').separator.tab
                     },
                 }
             }
         }
-
     },
 })
