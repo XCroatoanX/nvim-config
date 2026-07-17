@@ -6,6 +6,23 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     end,
 })
 
+vim.filetype.add({
+    extension = {
+        yaml = function(path, bufnr)
+            -- Check if it's a docker-compose file
+            if path:match("docker%-compose") or path:match("compose%.yaml") then
+                return "yaml.docker-compose"
+            end
+            return "yaml"
+        end,
+    },
+    pattern = {
+        [".*/templates/.*%.yaml"] = "helm",
+        [".*/templates/.*%.tpl"] = "helm",
+        ["values%.yaml"] = "yaml.helm-values",
+    },
+})
+
 local lsp_group = vim.api.nvim_create_augroup("nvim_lsp_config", { clear = true })
 
 local function buffer_map(bufnr, mode, lhs, rhs, desc, opts)

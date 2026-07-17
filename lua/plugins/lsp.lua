@@ -17,8 +17,8 @@ vim.lsp.config("yamlls", {
     settings = {
         yaml = {
             schemas = {
-                ["kubernetes"] = "/*.yaml",
-            },
+                kubernetes = { "k8s/*.yaml", "deploy/**/*.yaml", "deployment*.yaml" }
+            }
         },
     },
 })
@@ -27,6 +27,11 @@ if vim.fn.executable("copilot-language-server") == 1 then
     vim.lsp.config("copilot", {
         capabilities = capabilities,
         workspace_required = false,
+        settings = {
+            telemetry = {
+                telemetryLevel = "off",
+            }
+        }
     })
 end
 

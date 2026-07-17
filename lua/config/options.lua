@@ -18,6 +18,7 @@ local options = {
     sidescrolloff = 8,
     updatetime = 250,
     timeoutlen = 300,
+    mousemoveevent = true,
 }
 
 for k, v in pairs(options) do

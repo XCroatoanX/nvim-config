@@ -10,3 +10,5 @@ vim.keymap.set('i', '<C-CR>', function()
         return '<CR>'
     end
 end, { expr = true, replace_keycodes = true, desc = 'Accept LSP inline completion or insert newline' })
+vim.keymap.set('n', '<leader>bp', ':BufferLinePick<CR>', { silent = true, desc = "Pick Buffer" })
+vim.keymap.set('n', '<leader><space>', ':Telescope buffers<CR>', { desc = "Switch Buffer List" })
