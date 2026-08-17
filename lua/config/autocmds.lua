@@ -1,4 +1,7 @@
--- Filetype-specific autocommands
+-- =============================================================================
+-- 1. Filetype Definitions & Setup
+-- =============================================================================
+
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = { "*.tf", "*.tfvars", "*.tfstate" },
     callback = function()
@@ -6,53 +9,64 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     end,
 })
 
-vim.filetype.add({
-    extension = {
-        yaml = function(path, bufnr)
-            -- Check if it's a docker-compose file
-            if path:match("docker%-compose") or path:match("compose%.yaml") then
-                return "yaml.docker-compose"
-            end
-            return "yaml"
-        end,
-    },
-    pattern = {
-        [".*/templates/.*%.yaml"] = "helm",
-        [".*/templates/.*%.tpl"] = "helm",
-        ["values%.yaml"] = "yaml.helm-values",
-    },
-})
-
-local lsp_group = vim.api.nvim_create_augroup("nvim_lsp_config", { clear = true })
-
-local function buffer_map(bufnr, mode, lhs, rhs, desc, opts)
-    vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { buffer = bufnr, desc = desc }, opts or {}))
-end
-
-local function toggle_feature(has_feature, enable, disable)
-    if not has_feature then
-        return
-    end
-
-    local enabled = enable()
-    disable(not enabled)
-end
-
+-- Auto-save on FocusLost
 vim.api.nvim_create_autocmd("FocusLost", {
     callback = function()
-        if vim.bo.buftype ~= "" then
-            return
-        end
-
+        if vim.bo.buftype ~= "" then return end
         if vim.bo.modified then
             vim.cmd("silent! noautocmd write")
         end
     end,
 })
 
+-- Diagnostics configuration
+vim.diagnostic.config({
+    virtual_lines = {
+        current_line = true, -- Only show virtual lines for current cursor line
+    },
+})
+
+-- =============================================================================
+-- 2. LSP Initialization (Neovim 0.11+ Native)
+-- =============================================================================
+
+-- Configure built-in LSP clients
+vim.lsp.config('copilot', {
+    settings = {
+        telemetry = {
+            telemetryLevel = "off",
+        },
+    },
+})
+
+-- Start your LSP servers
+vim.lsp.enable({ 'lua_ls', 'copilot' })
+
+-- =============================================================================
+-- 3. Unified LspAttach Autocommands & Keymaps
+-- =============================================================================
+
+local lsp_group = vim.api.nvim_create_augroup("nvim_lsp_config", { clear = true })
+
+-- Helper to set buffer-local keymaps cleanly
+local function buffer_map(bufnr, mode, lhs, rhs, desc, opts)
+    vim.keymap.set(mode, lhs, rhs, vim.tbl_extend("force", { buffer = bufnr, desc = desc }, opts or {}))
+end
+
+-- Helper to toggle optional LSP features
+local function toggle_feature(has_feature, enable, disable)
+    if not has_feature then return end
+    local enabled = enable()
+    disable(not enabled)
+end
+
 vim.api.nvim_create_autocmd("LspAttach", {
     group = lsp_group,
     callback = function(event)
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if not client then return end
+
+        -- Generic LSP navigation / action keymaps
         buffer_map(event.buf, "n", "K", vim.lsp.buf.hover, "LSP: Hover")
         buffer_map(event.buf, "n", "gd", vim.lsp.buf.definition, "LSP: Go to definition")
         buffer_map(event.buf, "n", "gD", vim.lsp.buf.declaration, "LSP: Go to declaration")
@@ -60,10 +74,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
         buffer_map(event.buf, "n", "gr", vim.lsp.buf.references, "LSP: References")
         buffer_map(event.buf, "n", "<leader>rn", vim.lsp.buf.rename, "LSP: Rename")
         buffer_map(event.buf, { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "LSP: Code action")
-        buffer_map(event.buf, "n", "<leader>f", function()
-            vim.lsp.buf.format({ async = true })
-        end, "LSP: Format")
-        buffer_map(event.buf, "n", "<leader>cl", vim.lsp.codelens.run, "LSP: Run CodeLens")
+
+        -- Toggle shortcuts for UI features
         buffer_map(event.buf, "n", "<leader>uh", function()
             toggle_feature(vim.lsp.inlay_hint, function()
                 return vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf })
@@ -71,76 +83,116 @@ vim.api.nvim_create_autocmd("LspAttach", {
                 vim.lsp.inlay_hint.enable(enabled, { bufnr = event.buf })
             end)
         end, "LSP: Toggle inlay hints")
-        buffer_map(event.buf, "n", "<leader>uc", function()
-            toggle_feature(vim.lsp.inline_completion, function()
-                return vim.lsp.inline_completion.is_enabled({ bufnr = event.buf })
-            end, function(enabled)
-                vim.lsp.inline_completion.enable(enabled, { bufnr = event.buf })
-            end)
-        end, "LSP: Toggle inline completion")
 
-        -- Changed to Alt+l to avoid conflicts with Blink/Copilot on Tab
-        buffer_map(event.buf, "i", "<M-l>", function()
-            if vim.lsp.inline_completion then
-                -- If an inline completion is active, get() inserts it and returns true.
-                -- If nothing is active, it returns false, falling back to inserting literal Alt+l characters.
+        -- ---------------------------------------------------------------------
+        -- Feature A: Native Standard Completion (Neovim 0.11+)
+        -- ---------------------------------------------------------------------
+        if client:supports_method(vim.lsp.protocol.Methods.textDocument_completion) then
+            vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
+            vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
+
+            buffer_map(event.buf, 'i', '<C-Space>', function()
+                vim.lsp.completion.get()
+            end, "LSP: Trigger completion")
+        end
+
+        -- ---------------------------------------------------------------------
+        -- Feature B: Native Inline Completion (AI / Copilot)
+        -- ---------------------------------------------------------------------
+        if vim.lsp.inline_completion and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
+            vim.lsp.inline_completion.enable(true, { bufnr = event.buf })
+
+            buffer_map(event.buf, "n", "<leader>uc", function()
+                toggle_feature(vim.lsp.inline_completion, function()
+                    return vim.lsp.inline_completion.is_enabled({ bufnr = event.buf })
+                end, function(enabled)
+                    vim.lsp.inline_completion.enable(enabled, { bufnr = event.buf })
+                end)
+            end, "LSP: Toggle inline completion")
+
+            -- Accept with Alt+l (Highly recommended over Tab to avoid breaking normal indentation)
+            buffer_map(event.buf, "i", "<M-l>", function()
                 if vim.lsp.inline_completion.get() then
                     return ""
                 end
-            end
-            return "<M-l>"
-        end, "LSP: Accept inline completion", { expr = true })
+                return "<M-l>"
+            end, "LSP: Accept inline completion", { expr = true })
 
-        buffer_map(event.buf, "i", "<M-]>", function()
-            if vim.lsp.inline_completion then
+            -- Cycle through suggestions
+            buffer_map(event.buf, "i", "<M-]>", function()
                 vim.lsp.inline_completion.select({ count = 1 })
-            end
-            return ""
-        end, "LSP: Next inline completion", { expr = true })
-        buffer_map(event.buf, "i", "<M-[>", function()
-            if vim.lsp.inline_completion then
-                vim.lsp.inline_completion.select({ count = -1 })
-            end
-            return ""
-        end, "LSP: Previous inline completion", { expr = true })
+                return ""
+            end, "LSP: Next suggestion", { expr = true })
 
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if not client then
-            return
+            buffer_map(event.buf, "i", "<M-[>", function()
+                vim.lsp.inline_completion.select({ count = -1 })
+                return ""
+            end, "LSP: Previous suggestion", { expr = true })
         end
 
+        -- ---------------------------------------------------------------------
+        -- Feature C: Signature Help
+        -- ---------------------------------------------------------------------
+        if client:supports_method(vim.lsp.protocol.Methods.textDocument_signatureHelp) then
+            buffer_map(event.buf, "n", "<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help")
+        end
+
+        -- ---------------------------------------------------------------------
+        -- Feature D: Document Highlight (Cursor Underlining)
+        -- ---------------------------------------------------------------------
         if client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_group = vim.api.nvim_create_augroup("nvim_lsp_highlight_" .. event.buf, { clear = true })
+
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
                 group = highlight_group,
                 buffer = event.buf,
                 callback = vim.lsp.buf.document_highlight,
             })
+
             vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
                 group = highlight_group,
                 buffer = event.buf,
                 callback = vim.lsp.buf.clear_references,
             })
+
             vim.api.nvim_create_autocmd("LspDetach", {
-                group = highlight_group,
+                group = lsp_group,
                 buffer = event.buf,
                 callback = function()
                     vim.lsp.buf.clear_references()
-                    vim.api.nvim_clear_autocmds({ group = highlight_group, buffer = event.buf })
+                    pcall(vim.api.nvim_del_augroup_by_id, highlight_group)
                 end,
             })
         end
 
+        -- ---------------------------------------------------------------------
+        -- Feature E: CodeLens
+        -- ---------------------------------------------------------------------
         if client:supports_method(vim.lsp.protocol.Methods.textDocument_codeLens) then
             vim.lsp.codelens.enable(true, { bufnr = event.buf })
+            buffer_map(event.buf, "n", "<leader>cl", vim.lsp.codelens.run, "LSP: Run CodeLens")
         end
 
-        if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, event.buf) and vim.lsp.inline_completion then
-            vim.lsp.inline_completion.enable(true, { bufnr = event.buf })
-        end
-
+        -- ---------------------------------------------------------------------
+        -- Feature F: Formatting (Manual + Auto-format on Save)
+        -- ---------------------------------------------------------------------
         if client:supports_method(vim.lsp.protocol.Methods.textDocument_formatting) then
+            -- Fallback formula for `=` key formatting
             vim.bo[event.buf].formatexpr = "v:lua.vim.lsp.formatexpr()"
+
+            -- Manual format keymap
+            buffer_map(event.buf, "n", "<leader>f", function()
+                vim.lsp.buf.format({ async = true })
+            end, "LSP: Format document")
+
+            -- Auto-format on save
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                group = lsp_group,
+                buffer = event.buf,
+                callback = function()
+                    vim.lsp.buf.format({ bufnr = event.buf, id = client.id, async = false })
+                end,
+            })
         end
     end,
 })
