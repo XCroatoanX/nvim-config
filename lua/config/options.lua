@@ -30,6 +30,9 @@ vim.opt.listchars:append({ space = ' ', trail = '»' })
 
 vim.o.autowriteall = true
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
     pattern = "*",
     callback = function()
