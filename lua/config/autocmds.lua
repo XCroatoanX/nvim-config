@@ -1,14 +1,6 @@
 -- =============================================================================
--- 1. Filetype Definitions & Setup
+-- 1. Initial Setup
 -- =============================================================================
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = { "*.tf", "*.tfvars", "*.tfstate" },
-    callback = function()
-        vim.bo.filetype = "terraform"
-    end,
-})
-
 -- Auto-save on FocusLost
 vim.api.nvim_create_autocmd("FocusLost", {
     callback = function()
