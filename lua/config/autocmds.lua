@@ -18,6 +18,14 @@ vim.diagnostic.config({
     },
 })
 
+vim.filetype.add({
+    extension = {
+        tf = 'terraform',
+        tfvars = 'terraform',
+        tfstate = 'json',
+    },
+})
+
 -- =============================================================================
 -- 2. LSP Initialization (Neovim 0.11+ Native)
 -- =============================================================================

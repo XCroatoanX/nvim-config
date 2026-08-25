@@ -78,5 +78,16 @@ cmp.setup({
             lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
         },
     },
-    snippets = { preset = 'default' },
+    snippets = {
+        preset = 'default',
+        -- fix for microslop terraform ls snippets being broken
+        expand = function(snippet)
+            -- Attempt standard expansion; ignore bad syntax from LSPs if it fails
+            local ok, _ = pcall(vim.snippet.expand, snippet)
+            if not ok then
+                -- Fallback: insert the snippet body as plain text
+                vim.api.nvim_put(vim.split(snippet, "\n"), "c", true, true)
+            end
+        end,
+    },
 })

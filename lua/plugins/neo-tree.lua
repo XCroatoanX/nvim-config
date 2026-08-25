@@ -7,5 +7,8 @@ vim.pack.add({
 
 require("neo-tree").setup({
     popup_border_style = "rounded",
+    filesystem = {
+        use_libuv_file_watcher = true
+    },
 })
 vim.keymap.set("n", "<C-e>", "<cmd>Neotree toggle<CR>", { noremap = true, silent = true, desc = "Toggle file explorer" })
