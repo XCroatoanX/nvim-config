@@ -1,10 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- only needed when using nvim-tree
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
-
 -- Load core configuration (options, autocmds, diagnostics)
 require('config')
 
