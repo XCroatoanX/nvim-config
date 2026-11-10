@@ -1,9 +1,12 @@
-vim.pack.add { { src = "https://github.com/catppuccin/nvim", name = "catppuccin" } }
-vim.cmd.colorscheme "catppuccin-nvim"
+-- vim.pack.add { { src = "https://github.com/catppuccin/nvim", name = "catppuccin" } }
+--
+vim.pack.add { { src = "https://github.com/Mofiqul/vscode.nvim", name = "vscode" } }
+
+vim.cmd.colorscheme "vscode"
 
 vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
 require("lualine").setup({
-    options = { theme = "catppuccin-nvim" },
+    options = { theme = "vscode" },
 })
 vim.pack.add({ "https://github.com/mawkler/modicator.nvim" })
 require("modicator").setup({

@@ -1,8 +1,7 @@
 vim.pack.add({ "https://github.com/MeanderingProgrammer/render-markdown.nvim" })
 require("render-markdown").setup({})
 
-vim.pack.add({ "https://github.com/lukas-reineke/indent-blankline.nvim" })
-require("ibl").setup({})
+
 
 vim.pack.add({ "https://github.com/HiPhish/rainbow-delimiters.nvim" })
 

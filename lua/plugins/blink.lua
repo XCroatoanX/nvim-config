@@ -2,6 +2,13 @@ vim.pack.add({ 'https://github.com/saghen/blink.lib', 'https://github.com/saghen
 vim.pack.add({ 'https://github.com/xzbdmw/colorful-menu.nvim', 'https://github.com/onsails/lspkind.nvim',
     'https://github.com/rafamadriz/friendly-snippets' })
 vim.pack.add({ "https://github.com/folke/lazydev.nvim" })
+vim.pack.add({ 'https://github.com/saghen/blink.lib', { src = 'https://github.com/saghen/blink.pairs', version = vim.version.range('*') }, })
+vim.pack.add({ 'https://github.com/saghen/blink.indent' })
+
+require('blink.pairs').download():pwait(60000)
+require('blink.pairs').setup()
+
+require('blink.indent').setup()
 
 require("lazydev").setup({
     library = {
