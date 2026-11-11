@@ -17,14 +17,13 @@ require("bufferline").setup({
         diagnostics_indicator = diagnostics_indicator,
         show_buffer_close_icons = true,
         show_close_icon = true,
-        separator_style = "slant",
         always_show_bufferline = true,
         right_mouse_command = "",
-        hover = { enabled = true, reveal = { "close" } },
+        hover = { enabled = true, delay = 0, reveal = { "close" } },
         offsets = {
             {
-                filetype = "neo-tree",
-                text = "Neo-tree",
+                filetype = "NvimTree",
+                text = "File Explorer",
                 highlight = "Directory",
                 text_align = "left",
                 separator = true,
